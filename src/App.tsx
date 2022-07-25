@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { faker } from '@faker-js/faker';
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+interface IListItem {
+  id: number;
+  title: string;
 }
 
-export default App
+function App() {
+  const [items, setItems] = useState<IListItem[]>([]);
+
+  const addNewItem = () => {
+    const newItem: IListItem = {
+      title: faker.lorem.sentence(3),
+      id: Math.random(),
+    };
+    setItems((_items) => [..._items, newItem]);
+  };
+
+  return (
+    <div className="root">
+      <button className="add-btn" onClick={addNewItem}>
+        Add item
+      </button>
+
+      <ul className="list">
+        {items.map((item: IListItem) => (
+          <li key={item.id}>
+            <span className="label">{item.title}</span>
+            <span className="delete-btn">X</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
